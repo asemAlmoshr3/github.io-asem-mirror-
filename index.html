@@ -1,26 +1,110 @@
 
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <title>Asem Mirror – Online Version</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: white;
-            font-family: Tahoma, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        h1 {
-            font-size: 32px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asem Mirror</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      direction: rtl;
+    }
+    h1 {
+      margin-top: 40px;
+      font-size: 24px;
+    }
+    #videoContainer {
+      width: 90%;
+      height: 60vh;
+      background: #000;
+      margin: 20px auto;
+      border: 2px solid #888;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    video {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 10px;
+    }
+    .controls {
+      margin-top: 20px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #27ae60;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #1e8449;
+    }
+    #linkContainer {
+      margin-top: 15px;
+      font-size: 14px;
+      direction: ltr;
+    }
+  </style>
 </head>
 <body>
-    <h1>🎉 أهلاً بك في Asem Mirror – النسخة المتصلة 🎉</h1>
+  <h1>🎥 أهلاً بك في النسخة التجريبية من Asem Mirror</h1>
+  <div id="videoContainer">
+    <video id="video" autoplay muted playsinline></video>
+  </div>
+  <div class="controls">
+    <button onclick="toggleCamera()">تبديل الكاميرا</button>
+    <button onclick="toggleMic()">تشغيل / كتم الصوت</button>
+    <button onclick="generateLink()">🔗 توليد رابط اتصال</button>
+  </div>
+  <div id="linkContainer"></div>
+
+  <script>
+    let video = document.getElementById('video');
+    let stream;
+    let useFront = true;
+
+    async function startCamera() {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      const constraints = {
+        video: { facingMode: useFront ? "user" : "environment" },
+        audio: true
+      };
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
+      video.srcObject = stream;
+    }
+
+    function toggleCamera() {
+      useFront = !useFront;
+      startCamera();
+    }
+
+    function toggleMic() {
+      if (stream) {
+        const audioTrack = stream.getAudioTracks()[0];
+        audioTrack.enabled = !audioTrack.enabled;
+      }
+    }
+
+    function generateLink() {
+      const id = Math.random().toString(36).substring(2, 10);
+      const link = `${window.location.origin}/call/${id}`;
+      document.getElementById('linkContainer').innerHTML = `📱 رابطك الخاص: <a href="${link}" target="_blank">${link}</a>`;
+    }
+
+    startCamera();
+  </script>
 </body>
 </html>
