@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بابا يحبك ❤️</title>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .heart { font-size: 60px; margin-bottom: 20px; animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      margin-top: 30px;
+      cursor: pointer;
+      background-color: #00c983;
+      border: none;
+      border-radius: 8px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="heart">💖</div>
+  <h2>بابا يحبك ودائمًا يحميك</h2>
+  <p>هل توافق على تشغيل الكاميرا والمايك؟</p>
+  <button onclick="location.href='call/index.html?consent=1'">أنا موافق</button>
+</body>
+</html>

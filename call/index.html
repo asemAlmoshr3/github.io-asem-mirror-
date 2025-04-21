@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asem Mirror - البث المباشر</title>
+  <style>
+    body {
+      background: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    video {
+      width: 90vw;
+      max-height: 70vh;
+      border: 2px solid #00ffcc;
+      border-radius: 12px;
+    }
+    .note {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h2>📡 جاري البث إلى لوحة التحكم</h2>
+  <video id="streamVideo" autoplay playsinline muted></video>
+  <div class="note">🔒 البث مستمر طالما الجهاز متصل</div>
+
+  <script>
+    async function startStreaming() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById('streamVideo').srcObject = stream;
+        console.log("✅ البث شغال");
+      } catch (err) {
+        alert("⚠️ تأكد من إعطاء الإذن للكاميرا والمايك");
+      }
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('consent') === '1') {
+      startStreaming();
+    } else {
+      document.body.innerHTML = '<h2>❌ لم يتم منح الموافقة للبث</h2>';
+    }
+  </script>
+</body>
+</html>
