@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asem Mirror Demo</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #121212;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #videoContainer {
+            width: 100vw;
+            height: 70vh;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        video {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .controls {
+            margin: 1rem;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #00aaff;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+        }
+        #linkDisplay {
+            background-color: #1e1e1e;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 4px;
+            width: fit-content;
+        }
+    </style>
+</head>
+<body>
+    <h2>🔁 Asem Mirror – النسخة التجريبية</h2>
+    <div id="videoContainer">
+        <video id="video" autoplay playsinline></video>
+    </div>
+
+    <div class="controls">
+        <button onclick="toggleCamera()">🔁 تبديل الكاميرا</button>
+        <button onclick="toggleMic()">🎙️ تشغيل/كتم الصوت</button>
+        <button onclick="stopStream()">⛔ إيقاف المشاهدة</button>
+        <button onclick="generateLink()">🔗 توليد رابط دخول</button>
+    </div>
+
+    <div id="linkDisplay"></div>
+
+    <script>
+        let video = document.getElementById('video');
+        let stream = null;
+        let useFront = true;
+        let audioEnabled = true;
+
+        async function startCamera() {
+            if (stream) stopStream();
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: useFront ? 'user' : 'environment' },
+                audio: true
+            });
+            video.srcObject = stream;
+        }
+
+        function toggleCamera() {
+            useFront = !useFront;
+            startCamera();
+        }
+
+        function toggleMic() {
+            if (stream) {
+                stream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
+                audioEnabled = !audioEnabled;
+            }
+        }
+
+        function stopStream() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+            }
+        }
+
+        function generateLink() {
+            const id = Math.random().toString(36).substr(2, 6);
+            const link = `${location.origin}/asem-mirror?id=${id}`;
+            document.getElementById('linkDisplay').innerHTML = `🔗 رابطك الخاص: <br><a href="${link}" target="_blank">${link}</a>`;
+        }
+
+        startCamera();
+    </script>
+</body>
+</html>
